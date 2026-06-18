@@ -3,15 +3,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('[ERROR] file=config/supabase.js message=Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars');
-}
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-  auth: { persistSession: false }
-});
+export const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 0
+      }
+    }
+  }
+);
 
 export const ITEM_IMAGES_BUCKET = 'itemImages';
